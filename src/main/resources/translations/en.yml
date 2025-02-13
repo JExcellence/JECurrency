@@ -1,0 +1,7 @@
+# en.yml
+# English translations for the internationalization system.
+# This file is formatted using Kyori MiniMessage with a fancy color palette.
+translations:
+  prefix:
+    - "<gradient:#ff7f50:#ff4500>✦ JECurrency
+ ✦</gradient> <color:#8b0000>|</color> <color:#d3d3d3>"
