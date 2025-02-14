@@ -89,4 +89,21 @@ public class UserCurrencyRepository extends AbstractCRUDRepository<UserCurrency,
 
 		return pPlayerCurrencies;
 	}
+
+	public List<UserCurrency> findAllByUniqueId(
+		final UUID uniqueId
+	) {
+		List<UserCurrency> currencies = this.cache.asMap().values().stream().filter(usercurrency -> usercurrency.getPlayer().getUniqueId().equals(uniqueId)).toList();
+		if (
+			! currencies.isEmpty()
+		) return currencies;
+
+		List<UserCurrency> pPlayerCurrencies = super.findListByAttributes(Map.of("user.uniqueId", uniqueId));
+		if (! pPlayerCurrencies.isEmpty()) {
+			for (UserCurrency usercurrency : pPlayerCurrencies)
+				this.cache.put(usercurrency.getId(), usercurrency);
+		}
+
+		return pPlayerCurrencies;
+	}
 }

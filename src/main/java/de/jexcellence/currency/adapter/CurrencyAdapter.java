@@ -8,6 +8,7 @@ import de.jexcellence.currency.database.repository.UserCurrencyRepository;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -16,18 +17,18 @@ import java.util.concurrent.CompletableFuture;
  * Implements the ICurrencyAdapter interface to provide asynchronous currency management.
  */
 public class CurrencyAdapter implements ICurrencyAdapter {
-	
+
 	private final JECurrency currency;
-	
+
 	/**
-	 * Constructs a CurrencyAdapter with the specified JECurrencies instance.
+	 * Constructs a CurrencyAdapter with the specified JECurrency instance.
 	 *
-	 * @param currency The JECurrencies instance to use for currency operations.
+	 * @param currency The JECurrency instance to use for currency operations.
 	 */
 	public CurrencyAdapter(final @NotNull JECurrency currency) {
 		this.currency = currency;
 	}
-	
+
 	/**
 	 * Retrieves the balance of an offline player for a specific currency.
 	 *
@@ -37,9 +38,11 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 	 */
 	@Override
 	public CompletableFuture<Double> getBalance(@NotNull OfflinePlayer offlinePlayer, @NotNull Currency currency) {
-		return this.currency.getUsercurrencyRepository().findByUniqueIdAndCurrencyAsync(offlinePlayer.getUniqueId(), currency).thenApplyAsync(usercurrency -> usercurrency == null ? 0.00 : usercurrency.getBalance(), this.currency.getExecutor());
+		return this.currency.getUsercurrencyRepository()
+			.findByUniqueIdAndCurrencyAsync(offlinePlayer.getUniqueId(), currency)
+			.thenApplyAsync(usercurrency -> usercurrency == null ? 0.00 : usercurrency.getBalance(), this.currency.getExecutor());
 	}
-	
+
 	/**
 	 * Retrieves the balance of a player currency entity.
 	 *
@@ -50,73 +53,75 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 	public CompletableFuture<Double> getBalance(@NotNull UserCurrency usercurrency) {
 		return CompletableFuture.supplyAsync(usercurrency::getBalance, this.currency.getExecutor());
 	}
-	
+
 	/**
 	 * Deposits a specified amount of currency to an offline player.
 	 *
 	 * @param offlinePlayer The offline player to deposit the currency to.
-	 * @param currency     The currency to deposit.
+	 * @param currency      The currency to deposit.
 	 * @param amount        The amount to deposit.
 	 * @return A CompletableFuture containing a CurrencyResponse indicating the result of the deposit operation.
 	 */
 	@Override
 	public CompletableFuture<CurrencyResponse> deposit(@NotNull OfflinePlayer offlinePlayer, @NotNull Currency currency, double amount) {
-		return this.currency.getUsercurrencyRepository().findByUniqueIdAndCurrencyAsync(offlinePlayer.getUniqueId(), currency)
-				.thenApplyAsync(usercurrency -> {
-					if (usercurrency == null) {
-						CurrencyResponse currencyResponse = new CurrencyResponse(amount, 0.00, CurrencyResponse.ResponseType.FAILURE, "Missing Player Account for uuid (" + offlinePlayer.getUniqueId() + ")");
-						this.currency.getPlatformLogger().logDebug(currencyResponse.errorMessage());
-						return currencyResponse;
-					}
-					return this.deposit(amount, usercurrency);
-				}, this.currency.getExecutor());
+		return this.currency.getUsercurrencyRepository()
+			.findByUniqueIdAndCurrencyAsync(offlinePlayer.getUniqueId(), currency)
+			.thenApplyAsync(usercurrency -> {
+				if (usercurrency == null) {
+					CurrencyResponse currencyResponse = new CurrencyResponse(amount, 0.00, CurrencyResponse.ResponseType.FAILURE, "Missing Player Account for uuid (" + offlinePlayer.getUniqueId() + ")");
+					this.currency.getPlatformLogger().logDebug(currencyResponse.errorMessage());
+					return currencyResponse;
+				}
+				return this.deposit(amount, usercurrency);
+			}, this.currency.getExecutor());
 	}
-	
+
 	/**
 	 * Deposits a specified amount of currency to a player currency entity.
 	 *
 	 * @param usercurrency The player currency entity to deposit the currency to.
-	 * @param amount          The amount to deposit.
+	 * @param amount       The amount to deposit.
 	 * @return A CompletableFuture containing a CurrencyResponse indicating the result of the deposit operation.
 	 */
 	@Override
 	public CompletableFuture<CurrencyResponse> deposit(@NotNull UserCurrency usercurrency, double amount) {
 		return CompletableFuture.supplyAsync(() -> this.deposit(amount, usercurrency), this.currency.getExecutor());
 	}
-	
+
 	/**
 	 * Withdraws a specified amount of currency from an offline player.
 	 *
 	 * @param offlinePlayer The offline player to withdraw the currency from.
-	 * @param currency     The currency to withdraw.
+	 * @param currency      The currency to withdraw.
 	 * @param amount        The amount to withdraw.
 	 * @return A CompletableFuture containing a CurrencyResponse indicating the result of the withdrawal operation.
 	 */
 	@Override
 	public CompletableFuture<CurrencyResponse> withdraw(@NotNull OfflinePlayer offlinePlayer, @NotNull Currency currency, double amount) {
-		return this.currency.getUsercurrencyRepository().findByUniqueIdAndCurrencyAsync(offlinePlayer.getUniqueId(), currency)
-				.thenApplyAsync(usercurrency -> {
-					if (usercurrency == null) {
-						CurrencyResponse currencyResponse = new CurrencyResponse(amount, 0.00, CurrencyResponse.ResponseType.FAILURE, "Missing Player Account for uuid (" + offlinePlayer.getUniqueId() + ")");
-						this.currency.getPlatformLogger().logDebug(currencyResponse.errorMessage());
-						return currencyResponse;
-					}
-					return this.withdraw(amount, usercurrency);
-				}, this.currency.getExecutor());
+		return this.currency.getUsercurrencyRepository()
+			.findByUniqueIdAndCurrencyAsync(offlinePlayer.getUniqueId(), currency)
+			.thenApplyAsync(usercurrency -> {
+				if (usercurrency == null) {
+					CurrencyResponse currencyResponse = new CurrencyResponse(amount, 0.00, CurrencyResponse.ResponseType.FAILURE, "Missing Player Account for uuid (" + offlinePlayer.getUniqueId() + ")");
+					this.currency.getPlatformLogger().logDebug(currencyResponse.errorMessage());
+					return currencyResponse;
+				}
+				return this.withdraw(amount, usercurrency);
+			}, this.currency.getExecutor());
 	}
-	
+
 	/**
 	 * Withdraws a specified amount of currency from a player currency entity.
 	 *
 	 * @param usercurrency The player currency entity to withdraw the currency from.
-	 * @param amount          The amount to withdraw.
+	 * @param amount       The amount to withdraw.
 	 * @return A CompletableFuture containing a CurrencyResponse indicating the result of the withdrawal operation.
 	 */
 	@Override
 	public CompletableFuture<CurrencyResponse> withdraw(@NotNull UserCurrency usercurrency, double amount) {
 		return CompletableFuture.supplyAsync(() -> this.withdraw(amount, usercurrency), this.currency.getExecutor());
 	}
-	
+
 	/**
 	 * Creates a player entity for the given offline player.
 	 *
@@ -136,7 +141,7 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 			return true;
 		}, this.currency.getExecutor());
 	}
-	
+
 	/**
 	 * Creates a currency entity.
 	 *
@@ -152,7 +157,7 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 			return true;
 		}, this.currency.getExecutor());
 	}
-	
+
 	/**
 	 * Checks if a currency with the given name exists.
 	 *
@@ -161,13 +166,16 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 	 */
 	@Override
 	public CompletableFuture<Boolean> hasGivenCurrency(String currencyName) {
-		return CompletableFuture.supplyAsync(() -> this.currency.getCurrencyRepository().findByAttributes(Map.of("identifier", currencyName)) != null, this.currency.getExecutor());
+		return CompletableFuture.supplyAsync(() ->
+				this.currency.getCurrencyRepository().findByAttributes(Map.of("identifier", currencyName)) != null,
+			this.currency.getExecutor()
+		);
 	}
-	
+
 	/**
 	 * Creates a player currency entity for the given player and currency.
 	 *
-	 * @param player  The player entity to associate with the player currency entity.
+	 * @param player   The player entity to associate with the player currency entity.
 	 * @param currency The currency entity to associate with the player currency entity.
 	 * @return A CompletableFuture containing true if the player currency entity was successfully created, false otherwise.
 	 */
@@ -180,11 +188,44 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 			return true;
 		}, this.currency.getExecutor());
 	}
-	
+
+	/**
+	 * Retrieves all player currency entities for the given offline player.
+	 *
+	 * @param offlinePlayer The offline player for which to retrieve all associated currencies.
+	 * @return A CompletableFuture containing a list of UserCurrency associated with the offline player.
+	 */
+	@Override
+	public CompletableFuture<List<UserCurrency>> getUserCurrencies(@NotNull OfflinePlayer offlinePlayer) {
+		return CompletableFuture.supplyAsync(() ->
+				this.currency.getUsercurrencyRepository().findAllByUniqueId(offlinePlayer.getUniqueId()),
+			this.currency.getExecutor()
+		);
+	}
+
+	/**
+	 * Retrieves a specific player currency entity for the given offline player based on the currency name.
+	 *
+	 * @param offlinePlayer The offline player for which to retrieve the currency.
+	 * @param currencyName  The name of the currency to retrieve.
+	 * @return A CompletableFuture containing the UserCurrency matching the currency name associated with the offline player,
+	 *         or null if not found.
+	 */
+	@Override
+	public CompletableFuture<UserCurrency> getUserCurrency(@NotNull OfflinePlayer offlinePlayer, String currencyName) {
+		return CompletableFuture.supplyAsync(() -> {
+			List<UserCurrency> userCurrencies = this.currency.getUsercurrencyRepository().findAllByUniqueId(offlinePlayer.getUniqueId());
+			return userCurrencies.stream()
+				.filter(uc -> uc.getCurrency() != null && currencyName.equals(uc.getCurrency().getIdentifier()))
+				.findFirst()
+				.orElse(null);
+		}, this.currency.getExecutor());
+	}
+
 	/**
 	 * Helper method to deposit an amount to a player currency entity.
 	 *
-	 * @param amount          The amount to deposit.
+	 * @param amount       The amount to deposit.
 	 * @param usercurrency The player currency entity to deposit the amount to.
 	 * @return A CurrencyResponse indicating the result of the deposit operation.
 	 */
@@ -199,11 +240,11 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 		this.currency.getPlatformLogger().logDebug(currencyResponse.errorMessage());
 		return currencyResponse;
 	}
-	
+
 	/**
 	 * Helper method to withdraw an amount from a player currency entity.
 	 *
-	 * @param amount          The amount to withdraw.
+	 * @param amount       The amount to withdraw.
 	 * @param usercurrency The player currency entity to withdraw the amount from.
 	 * @return A CurrencyResponse indicating the result of the withdrawal operation.
 	 */
