@@ -53,14 +53,14 @@ public class UserRepository extends AbstractCRUDRepository<User, Long> {
 	) {
 		User cachedUser = this.cache.getIfPresent(uniqueId);
 
-		if (cachedUser == null) {
-			User foundUser = super.findByAttributes(Map.of("uniqueId", uniqueId));
-			if (foundUser != null)
-				this.cache.put(foundUser.getUniqueId(), foundUser);
-			return foundUser;
-		}
+		if (
+			cachedUser != null
+		) return cachedUser;
 
-		return cachedUser;
+		User foundUser = super.findByAttributes(Map.of("uniqueId", uniqueId));
+		if (foundUser != null)
+			this.cache.put(foundUser.getUniqueId(), foundUser);
+		return foundUser;
 	}
 
 	public CompletableFuture<User> findByUniqueIdAsync(
