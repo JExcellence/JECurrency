@@ -133,7 +133,7 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 				this.plugin.getPlatformLogger().logDebug("Offline player's name is not defined for uuid: " + offlinePlayer.getUniqueId());
 				return false;
 			}
-			if (this.plugin.getUserRepository().findByUniqueId(offlinePlayer.getUniqueId()) != null) {
+			if (this.plugin.getUserRepository().findByAttributes(Map.of("uniqueId", offlinePlayer.getUniqueId())) != null) {
 				return false;
 			}
 			User user = new User(offlinePlayer.getUniqueId(), offlinePlayer.getName());

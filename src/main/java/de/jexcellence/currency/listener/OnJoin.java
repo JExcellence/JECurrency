@@ -25,7 +25,7 @@ public class OnJoin implements Listener {
 	public void onJoin(
 		final AsyncPlayerPreLoginEvent event
 	) {
-		this.currency.getUserRepository().findByUniqueIdAsync(event.getUniqueId()).thenAcceptAsync(
+		this.currency.getUserRepository().findByAttributesAsync(Map.of("uniqueId", event.getUniqueId())).thenAcceptAsync(
 			player -> {
 				if (player == null) {
 					player = new User(event.getUniqueId(), event.getName());
