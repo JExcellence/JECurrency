@@ -67,7 +67,7 @@ public class PCurrency extends PlayerCommand {
 			OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(targetName);
 
 			if (!targetPlayer.hasPlayedBefore()) {
-				new I18n.Builder("currency.error.player_not_found", player)
+				new I18n.Builder("general.invalid_player", player)
 						.includingPrefix()
 						.withPlaceholders(Map.of("player", targetName))
 						.build().send();
@@ -85,7 +85,7 @@ public class PCurrency extends PlayerCommand {
 				.orElse(null);
 
 		if (currency == null) {
-			new I18n.Builder("currency.error.currency_not_found", player)
+			new I18n.Builder("general.invalid_currency", player)
 					.includingPrefix()
 					.withPlaceholders(Map.of(
 							"currency", currencyName,
@@ -106,7 +106,7 @@ public class PCurrency extends PlayerCommand {
 			OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(playerName);
 
 			if (!targetPlayer.hasPlayedBefore()) {
-				new I18n.Builder("currency.error.player_not_found", player)
+				new I18n.Builder("general.invalid_player", player)
 						.includingPrefix()
 						.withPlaceholders(Map.of("player", playerName))
 						.build().send();

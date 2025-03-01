@@ -47,6 +47,9 @@ translations:
       details: "<color:#ffa500>➤</color> Symbol: <color:#ffd700>%symbol%</color>\n<color:#ffa500>➤</color> Prefix: <color:#ffd700>%prefix%</color>\n<color:#ffa500>➤</color> Suffix: <color:#ffd700>%suffix%</color>"
       not_found: "<color:#ff4500>✖</color> Currency <color:#ffd700>%identifier%</color> does not exist!"
 
+    error:
+      no_currencies: "<color:#ff6b6b>✖</color> There are no currencies yet."
+
     balance:
       self: "<gradient:#32cd32:#4caf50>✓</gradient> Your <gradient:#ffd700:#ffcc00>%currency%</gradient> balance: <color:#ffd700>%prefix%</color><bold><color:#ffffff>%balance%</color></bold><color:#ffd700>%suffix% %symbol%</color>"
       other: "<gradient:#32cd32:#4caf50>✓</gradient> <color:#add8e6>%player%</color>'s <gradient:#ffd700:#ffcc00>%currency%</gradient> balance: <color:#ffd700>%prefix%</color><bold><color:#ffffff>%balance%</color></bold><color:#ffd700>%suffix% %symbol%</color>"
