@@ -225,14 +225,23 @@ public class CurrencyAdapter implements ICurrencyAdapter {
 	@Override
 	public CompletableFuture<UserCurrency> getUserCurrency(@NotNull OfflinePlayer offlinePlayer, String currencyName) {
 		return CompletableFuture.supplyAsync(() -> {
-			List<UserCurrency> userCurrencies = this.plugin.getUsercurrencyRepository()
-					.findListByAttributes(Map.of("player.uniqueId", offlinePlayer.getUniqueId()));
+			try {
+				List<UserCurrency> userCurrencies = this.plugin.getUsercurrencyRepository().findListByAttributes(Map.of("player.uniqueId", offlinePlayer.getUniqueId()));
 
-			return userCurrencies.stream()
-					.filter(uc -> uc.getCurrency() != null && currencyName.equals(uc.getCurrency().getIdentifier()))
-					.findFirst()
-					.orElse(null);
-		}, this.plugin.getExecutor());
+				return userCurrencies.stream()
+						.filter(uc -> uc.getCurrency() != null && currencyName.equals(uc.getCurrency().getIdentifier()))
+						.findFirst()
+						.orElse(null);
+			} catch (Exception e) {
+				this.plugin.getPlatformLogger().logDebug("Failed to get currency for " + offlinePlayer.getUniqueId() + ", name: " + currencyName, e);
+				return null;
+			}
+		}, this.plugin.getExecutor()).exceptionallyAsync(
+				throwable -> {
+					this.plugin.getPlatformLogger().logDebug("Failed to get currency for " + offlinePlayer.getUniqueId() + ", name: " + currencyName);
+					return null;
+				}
+		, this.plugin.getExecutor());
 	}
 
 	/**
