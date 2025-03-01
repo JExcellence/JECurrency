@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 public class OnJoin implements Listener {
 
 	private final JECurrency currency;
@@ -44,7 +46,7 @@ public class OnJoin implements Listener {
 		final @NotNull User player
 	) {
 		this.currency.getCurrencies().values().forEach(currency -> {
-			this.currency.getUsercurrencyRepository().findByUniqueIdAndCurrencyAsync(player.getUniqueId(), currency).thenAcceptAsync(
+			this.currency.getUsercurrencyRepository().findByAttributesAsync(Map.of("user.uniqueId", player.getUniqueId(), "currency", currency)).thenAcceptAsync(
 				usercurrency -> {
 					if (usercurrency == null)
 						this.currency.getUsercurrencyRepository().create(new UserCurrency(player, currency));

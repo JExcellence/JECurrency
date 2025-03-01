@@ -3,7 +3,6 @@ package de.jexcellence.currency.view;
 import de.jexcellence.currency.JECurrency;
 import de.jexcellence.currency.database.entity.Currency;
 import de.jexcellence.je18n.i18n.I18n;
-import de.jexcellence.jeplatform.utility.AnvilUIFactory;
 import de.jexcellence.jeplatform.utility.itemstack.ItemBuildable;
 import me.devnatan.inventoryframework.View;
 import me.devnatan.inventoryframework.ViewConfigBuilder;
@@ -60,13 +59,13 @@ public class CurrenciesCreatingView extends View {
 						new I18n.Builder("currencies_creating_ui.currency_identifier.lore", context.getPlayer()).withPlaceholder("currency_identifier", this.currency.getIdentifier()).build().display()
 				).build()
 		).onClick(clickContext -> {
-/*			this.currencyPlugin.getViewFrame().open(DynamicAnvilView.class, clickContext.getPlayer(), Map.of(
+			this.currencyPlugin.getViewFrame().open(DynamicAnvilView.class, clickContext.getPlayer(), Map.of(
 					"plugin", this.currencyPlugin,
 					"currency", this.currency,
 					"attribute", "currency_identifier",
 					"setter", (Consumer<String>) this.currency::setIdentifier,
 					"validator", Pattern.compile("^[a-zA-Z_-]$").asMatchPredicate()
-			));*/
+			));
 		});
 	}
 }

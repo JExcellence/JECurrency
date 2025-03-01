@@ -3,5 +3,99 @@
 # This file is formatted using Kyori MiniMessage with a fancy color palette.
 translations:
   prefix:
-    - "<gradient:#ff7f50:#ff4500>✦ JECurrency
- ✦</gradient> <color:#8b0000>|</color> <color:#d3d3d3>"
+    - "<gradient:#ff7f50:#ff4500>✦ JECurrency ✦</gradient> <color:#8b0000>|</color> <color:#d3d3d3>"
+
+  # General messages
+  general:
+    no_permission: "<color:#ff4500>✖</color> You don't have permission to use this command."
+    invalid_player: "<color:#ff4500>✖</color> Player not found."
+    invalid_amount: "<color:#ff4500>✖</color> Please enter a valid amount."
+    invalid_currency: "<color:#ff4500>✖</color> Currency not found."
+    loading: "<color:#ffa500>⌛</color> Loading data, please wait..."
+    success: "<color:#32cd32>✓</color> Operation completed successfully!"
+    error: "<color:#ff4500>✖</color> An error occurred. Please try again later."
+
+  # Currency command messages
+  currency:
+    command:
+      usage: "<color:#ffa500>⚠</color> Usage: /currency %usage%"
+
+    create:
+      success: "<color:#32cd32>✓</color> Successfully created currency <color:#ffd700>%identifier%</color>!"
+      already_exists: "<color:#ff4500>✖</color> Currency <color:#ffd700>%identifier%</color> already exists!"
+      failed: "<color:#ff4500>✖</color> Failed to create currency. Please try again."
+
+    delete:
+      success: "<color:#32cd32>✓</color> Successfully deleted currency <color:#ffd700>%identifier%</color>!"
+      not_found: "<color:#ff4500>✖</color> Currency <color:#ffd700>%identifier%</color> does not exist!"
+      failed: "<color:#ff4500>✖</color> Failed to delete currency. Please try again."
+
+    edit:
+      success: "<color:#32cd32>✓</color> Successfully updated <color:#ffd700>%field%</color> of currency <color:#ffd700>%identifier%</color> to <color:#ffd700>%value%</color>!"
+      not_found: "<color:#ff4500>✖</color> Currency <color:#ffd700>%identifier%</color> does not exist!"
+      failed: "<color:#ff4500>✖</color> Failed to update currency. Please try again."
+      fields: "<color:#ffa500>ℹ</color> Available fields: <color:#ffd700>symbol</color>, <color:#ffd700>prefix</color>, <color:#ffd700>suffix</color>, <color:#ffd700>identifier</color>"
+
+    list:
+      header: "<color:#ffa500>📋</color> Available Currencies (<color:#ffd700>%count%</color>):"
+      entry: "<color:#ffa500>➤</color> <color:#ffd700>%identifier%</color> - Symbol: <color:#ffd700>%symbol%</color>, Prefix: <color:#ffd700>%prefix%</color>, Suffix: <color:#ffd700>%suffix%</color>"
+      empty: "<color:#ffa500>ℹ</color> No currencies found. Create one with /currency create"
+
+    info:
+      header: "<color:#ffa500>📊</color> Currency Information: <color:#ffd700>%identifier%</color>"
+      details: "<color:#ffa500>➤</color> Symbol: <color:#ffd700>%symbol%</color>\n<color:#ffa500>➤</color> Prefix: <color:#ffd700>%prefix%</color>\n<color:#ffa500>➤</color> Suffix: <color:#ffd700>%suffix%</color>"
+      not_found: "<color:#ff4500>✖</color> Currency <color:#ffd700>%identifier%</color> does not exist!"
+
+  # Balance command messages
+  balance:
+    self: "<color:#ffa500>💰</color> Your balance: <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color>"
+    other: "<color:#ffa500>💰</color> <color:#ffd700>%player%</color>'s balance: <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color>"
+    all: "<color:#ffa500>💰</color> Your balances:"
+    all_entry: "<color:#ffa500>➤</color> <color:#ffd700>%identifier%</color>: <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color>"
+    not_found: "<color:#ff4500>✖</color> You don't have any balance for <color:#ffd700>%identifier%</color>!"
+
+  # Pay command messages
+  pay:
+    success_sender: "<color:#32cd32>✓</color> You sent <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color> to <color:#ffd700>%player%</color>!"
+    success_receiver: "<color:#32cd32>✓</color> You received <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color> from <color:#ffd700>%player%</color>!"
+    insufficient_funds: "<color:#ff4500>✖</color> You don't have enough funds! Required: <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color>"
+    self_pay: "<color:#ff4500>✖</color> You cannot pay yourself!"
+    failed: "<color:#ff4500>✖</color> Payment failed. Please try again."
+
+  # Admin command messages
+  admin:
+    set:
+      success: "<color:#32cd32>✓</color> Set <color:#ffd700>%player%</color>'s balance to <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color>!"
+      failed: "<color:#ff4500>✖</color> Failed to set balance. Please try again."
+
+    give:
+      success: "<color:#32cd32>✓</color> Gave <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color> to <color:#ffd700>%player%</color>!"
+      failed: "<color:#ff4500>✖</color> Failed to give currency. Please try again."
+
+    take:
+      success: "<color:#32cd32>✓</color> Took <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color> from <color:#ffd700>%player%</color>!"
+      insufficient_funds: "<color:#ff4500>✖</color> <color:#ffd700>%player%</color> doesn't have enough funds!"
+      failed: "<color:#ff4500>✖</color> Failed to take currency. Please try again."
+
+    reset:
+      success: "<color:#32cd32>✓</color> Reset <color:#ffd700>%player%</color>'s balance for <color:#ffd700>%identifier%</color>!"
+      all_success: "<color:#32cd32>✓</color> Reset all of <color:#ffd700>%player%</color>'s balances!"
+      failed: "<color:#ff4500>✖</color> Failed to reset balance. Please try again."
+
+  # Help messages
+  help:
+    header: "<color:#ffa500>📚</color> JECurrency Help Menu:"
+    currency: "<color:#ffa500>➤</color> <color:#ffd700>/currency</color> - Manage currencies"
+    balance: "<color:#ffa500>➤</color> <color:#ffd700>/balance [player] [currency]</color> - Check balance"
+    pay: "<color:#ffa500>➤</color> <color:#ffd700>/pay <player> <amount> [currency]</color> - Pay another player"
+    admin: "<color:#ffa500>➤</color> <color:#ffd700>/currencyadmin</color> - Admin commands"
+
+  # Currency command help
+  currencies:
+    help:
+      - "<color:#ffa500>📚</color> Currency Command Help:"
+      - "<color:#ffa500>➤</color> <color:#ffd700>/currency create <identifier> <symbol> [prefix] [suffix]</color> - Create a new currency"
+      - "<color:#ffa500>➤</color> <color:#ffd700>/currency delete <identifier></color> - Delete a currency"
+      - "<color:#ffa500>➤</color> <color:#ffd700>/currency edit <identifier> <field> <value></color> - Edit a currency"
+      - "<color:#ffa500>➤</color> <color:#ffd700>/currency overview</color> - List all currencies"
+      - "<color:#ffa500>➤</color> <color:#ffd700>/currency info <identifier></color> - Show currency details"

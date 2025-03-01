@@ -4,6 +4,7 @@ public enum ECurrenciesAction {
 	CREATE,
 	DELETE,
 	EDIT,
+	INFO,
 	HELP,
 	OVERVIEW
 }

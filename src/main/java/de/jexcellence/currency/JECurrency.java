@@ -1,6 +1,7 @@
 package de.jexcellence.currency;
 
 import de.jexcellence.commands.CommandFactory;
+import de.jexcellence.currency.adapter.CurrencyAdapter;
 import de.jexcellence.currency.database.entity.Currency;
 import de.jexcellence.currency.database.repository.CurrencyRepository;
 import de.jexcellence.currency.database.repository.UserCurrencyRepository;
@@ -27,6 +28,8 @@ public class JECurrency extends JavaPlugin {
 	private CommandFactory commandFactory;
 	private InventoryFactory inventoryFactory;
 
+	private CurrencyAdapter currencyAdapter;
+
 	private UserCurrencyRepository usercurrencyRepository;
 	private CurrencyRepository currencyRepository;
 	private UserRepository userRepository;
@@ -51,6 +54,8 @@ public class JECurrency extends JavaPlugin {
 		this.userRepository = new UserRepository(this.executor, this.platform.getEntityManagerFactory());
 		this.currencyRepository = new CurrencyRepository(this.executor, this.platform.getEntityManagerFactory());
 		this.usercurrencyRepository = new UserCurrencyRepository(this.executor, this.platform.getEntityManagerFactory());
+
+		this.currencyAdapter = new CurrencyAdapter(this);
 
 		this.viewFrame = ViewFrame.create(this).defaultConfig(config -> {
 			config.cancelOnClick();
@@ -106,6 +111,10 @@ public class JECurrency extends JavaPlugin {
 
 	public ViewFrame getViewFrame() {
 		return this.viewFrame;
+	}
+
+	public CurrencyAdapter getCurrencyAdapter() {
+		return this.currencyAdapter;
 	}
 
 	private void loadCurrencies() {
