@@ -1,10 +1,13 @@
 commands:
-  pcurrencies:
-    name: 'pcurrencies'
+  pcurrency:
+    name: 'pcurrency'
     description: ''
     aliases:
-      - currencies
-    usage: 'currencies'
+      - currency
+      - balance
+      - bal
+      - money
+    usage: 'currency'
     argumentUsages:
       1$: 'lut["prefix"] & "&7/" & alias & "&7"'
     errorMessages:
@@ -14,11 +17,8 @@ commands:
     permissions:
       missingMessage$: 'lut["prefix"] & "You\sre lacking the permission: " & permission'
       nodes:
-        command: "currencies.command"
-        commandCreate: "currencies.command.create"
-        commandDelete: "currencies.command.delete"
-        commandEdit: "currencies.command.update"
-        commandOverview: "currencies.command.overview"
+        command: "currency.command"
+        commandOther: "currency.command.other"
 
 lut:
-  prefix: '&8[&5Currencies&8] &7'
+  prefix: '&8[&5Currency&8] &7'

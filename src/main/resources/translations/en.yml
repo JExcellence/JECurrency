@@ -47,6 +47,35 @@ translations:
       details: "<color:#ffa500>➤</color> Symbol: <color:#ffd700>%symbol%</color>\n<color:#ffa500>➤</color> Prefix: <color:#ffd700>%prefix%</color>\n<color:#ffa500>➤</color> Suffix: <color:#ffd700>%suffix%</color>"
       not_found: "<color:#ff4500>✖</color> Currency <color:#ffd700>%identifier%</color> does not exist!"
 
+    balance:
+      self: "<gradient:#32cd32:#4caf50>✓</gradient> Your <gradient:#ffd700:#ffcc00>%currency%</gradient> balance: <color:#ffd700>%prefix%</color><bold><color:#ffffff>%balance%</color></bold><color:#ffd700>%suffix% %symbol%</color>"
+      other: "<gradient:#32cd32:#4caf50>✓</gradient> <color:#add8e6>%player%</color>'s <gradient:#ffd700:#ffcc00>%currency%</gradient> balance: <color:#ffd700>%prefix%</color><bold><color:#ffffff>%balance%</color></bold><color:#ffd700>%suffix% %symbol%</color>"
+
+      all_header_self: "<gradient:#ff7f50:#ff4500>╔══════════ Your Currency Balances ══════════╗</gradient>"
+      all_header_other: "<gradient:#ff7f50:#ff4500>╔══════════ %player%'s Currency Balances ══════════╗</gradient>"
+      all_footer: "<gradient:#ff7f50:#ff4500>╚═══════════════════════════════════════════╝</gradient>"
+
+      entry: "<color:#d3d3d3>║ <gradient:#ffd700:#ffcc00>%currency%</gradient>: <color:#ffd700>%prefix%</color><bold><color:#ffffff>%balance%</color></bold><color:#ffd700>%suffix% %symbol%</color></color>"
+
+      no_currencies_self: "<color:#ff6b6b>✖</color> You don't have any currency balances yet."
+      no_currencies_other: "<color:#ff6b6b>✖</color> <color:#add8e6>%player%</color> doesn't have any currency balances yet."
+
+      error:
+        currency_not_found: "<color:#ff4500>✖</color> Currency <color:#ffd700>%currency%</color> not found. Available currencies: <color:#d3d3d3>%available_currencies%</color>"
+        player_not_found: "<color:#ff4500>✖</color> Player <color:#add8e6>%player%</color> not found or has never played before."
+        no_currencies: "<color:#ff4500>✖</color> There are no currencies configured in the system."
+        no_permission: "<color:#ff4500>✖</color> You don't have permission to use this command."
+
+    help:
+      header: "<gradient:#ff7f50:#ff4500>✦ Currency Command Help ✦</gradient>"
+      usage: "<color:#d3d3d3>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</color>"
+      commands:
+        - "<color:#ffd700>•</color> <color:#add8e6>/currency</color> <color:#d3d3d3>- View all your currency balances</color>"
+        - "<color:#ffd700>•</color> <color:#add8e6>/currency <currency></color> <color:#d3d3d3>- View your balance for a specific currency</color>"
+        - "<color:#ffd700>•</color> <color:#add8e6>/currency <player></color> <color:#d3d3d3>- View all balances of another player</color>"
+        - "<color:#ffd700>•</color> <color:#add8e6>/currency <currency> <player></color> <color:#d3d3d3>- View another player's balance for a specific currency</color>"
+      footer: "<color:#d3d3d3>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</color>"
+
   # Balance command messages
   balance:
     self: "<color:#ffa500>💰</color> Your balance: <color:#ffd700>%prefix%%amount%%symbol%%suffix%</color>"
