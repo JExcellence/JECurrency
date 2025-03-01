@@ -10,6 +10,8 @@ commands:
       1$: 'lut["prefix"] & "&7/" & alias & "&7"'
     errorMessages:
       internalError$: 'lut["prefix"] & "&4An internal error occurred"'
+      playerNotOnline$: 'lut["prefix"] & "&4The player is not online"'
+      notAPlayer$: 'lut["prefix"] & "&4You\sre not a player"'
 
 permissions:
   missingMessage$: 'lut["prefix"] & "You\sre lacking the permission: " & permission'

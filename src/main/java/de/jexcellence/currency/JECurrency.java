@@ -13,6 +13,8 @@ import de.jexcellence.jeplatform.inventory.InventoryFactory;
 import de.jexcellence.jeplatform.logger.JELogger;
 import me.devnatan.inventoryframework.AnvilInputFeature;
 import me.devnatan.inventoryframework.ViewFrame;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.LinkedHashMap;
@@ -40,6 +42,8 @@ public class JECurrency extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
+		Bukkit.getServer().getServicesManager().register(CurrencyAdapter.class, new CurrencyAdapter(this), this, ServicePriority.Normal);
+
 		this.platform = new JEPlatform(this, true);
 		this.getPlatformLogger().logInfo("JECurrency is starting...");
 	}
