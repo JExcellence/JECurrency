@@ -2,12 +2,14 @@ package de.jexcellence.currency.command.player.currencies;
 
 import de.jexcellence.currency.JECurrency;
 import de.jexcellence.currency.database.entity.Currency;
+import de.jexcellence.currency.database.entity.UserCurrency;
 import de.jexcellence.je18n.i18n.I18n;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -54,11 +56,14 @@ public class CurrencyCommandHandler {
                     this.plugin.getCurrencyAdapter().createCurrency(currency)
                             .thenAcceptAsync(success -> {
                                 if (success) {
-                                    new I18n.Builder("currency.create.success", player)
-                                            .includingPrefix()
-                                            .withPlaceholder("identifier", identifier)
-                                            .build()
-                                            .send();
+                                    new I18n.Builder("currency.create.success", player).includingPrefix().withPlaceholder("identifier", identifier).build().send();
+
+                                    this.plugin.getUserRepository().findAllAsync(0, 128).thenAcceptAsync(
+                                            users -> {
+                                                users.forEach(user -> this.plugin.getUsercurrencyRepository().create(new UserCurrency(user, currency)));
+                                                new I18n.Builder("currency.create.success.player_accounts_created", player).includingPrefix().withPlaceholders(Map.of("player_amount", users.size(), "identifier", identifier));
+                                            }, this.plugin.getExecutor()
+                                    );
                                 } else {
                                     new I18n.Builder("currency.create.failed", player)
                                             .includingPrefix()
