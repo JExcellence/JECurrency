@@ -46,7 +46,7 @@ public class OnJoin implements Listener {
 		final @NotNull User player
 	) {
 		this.currency.getCurrencies().values().forEach(currency -> {
-			this.currency.getUsercurrencyRepository().findByAttributesAsync(Map.of("user.uniqueId", player.getUniqueId(), "currency", currency)).thenAcceptAsync(
+			this.currency.getUsercurrencyRepository().findByAttributesAsync(Map.of("player.uniqueId", player.getUniqueId(), "currency", currency)).thenAcceptAsync(
 				usercurrency -> {
 					if (usercurrency == null)
 						this.currency.getUsercurrencyRepository().create(new UserCurrency(player, currency));

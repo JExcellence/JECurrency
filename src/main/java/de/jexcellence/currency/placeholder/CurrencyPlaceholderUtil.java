@@ -73,7 +73,7 @@ public class CurrencyPlaceholderUtil {
             return "N/A";
         }
         
-        UserCurrency userCurrency = this.plugin.getUsercurrencyRepository().findByAttributes(Map.of("user.uniqueId", playerId, "currency", currency.get().getIdentifier()));
+        UserCurrency userCurrency = this.plugin.getUsercurrencyRepository().findByAttributes(Map.of("player.uniqueId", playerId, "currency", currency.get().getIdentifier()));
             
         if (userCurrency == null) {
             return "N/A";
