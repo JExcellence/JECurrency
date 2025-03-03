@@ -8,6 +8,7 @@ import de.jexcellence.currency.database.entity.UserCurrency;
 import de.jexcellence.je18n.i18n.I18n;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
