@@ -151,7 +151,7 @@ public class PCurrencies extends PlayerCommand {
 			String field = args[2].toLowerCase();
 
 			if (field.equals("symbol")) {
-				List<String> symbols = Arrays.asList("$", "€", "£", "¥", "₿", "⭐", "💎", "🪙");
+				List<String> symbols = getCurrencySymbols();
 				return StringUtil.copyPartialMatches(args[3], symbols, completions);
 			} else if (field.equals("prefix") || field.equals("suffix")) {
 				List<String> suggestions = Arrays.asList("", " ", "  ");
@@ -160,6 +160,35 @@ public class PCurrencies extends PlayerCommand {
 		}
 
 		return completions;
+	}
+
+	/**
+	 * Gets a list of currency symbols that are compatible with Minecraft's chat system
+	 *
+	 * @return A list of currency symbols
+	 */
+	private List<String> getCurrencySymbols() {
+		return Arrays.asList(
+				"$",
+				"€",
+				"£",
+				"¥",
+				"₿",
+				"★",
+				"✦",
+				"\u2B50",
+				"\u25C6",
+				"\u2666",
+				"\u27E1",
+				"C",
+				"G",
+				"P",
+				"T",
+				"*",
+				"#",
+				"@",
+				"+"
+		);
 	}
 
 	/**
@@ -176,7 +205,7 @@ public class PCurrencies extends PlayerCommand {
 			case EDIT -> ECurrenciesPermission.EDIT;
 		};
 	}
-	
+
 	private void help(
 			final @NotNull Player player
 	) {

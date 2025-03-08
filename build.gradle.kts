@@ -65,7 +65,7 @@ tasks.register<ShadowJar>("cleanShadowJar") {
 }
 
 tasks.withType<ShadowJar> {
-    destinationDirectory.set(file("C:\\Users\\Justin\\Desktop\\JExcellence\\JExcellence-Server\\plugins"))
+    //destinationDirectory.set(file("C:\\Users\\Justin\\Desktop\\JExcellence\\JExcellence-Server\\plugins"))
 
     archiveFileName.set("JECurrency.jar")
 
