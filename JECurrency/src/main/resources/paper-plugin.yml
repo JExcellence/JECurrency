@@ -1,0 +1,10 @@
+name: JECurrency
+main: de.jexcellence.currency.JECurrency
+loader: com.raindropcentral.rplatform.dependency.RPluginLoader
+version: 1.0.0
+api-version: "1.19"
+authors: [ JExcellence ]
+website: https://jexcellence.de
+has-open-classloader: true
+depend: [ InventoryFramework ]
+softdepend: [ Vault ]
