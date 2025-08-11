@@ -35,6 +35,7 @@ JECurrency provides:
 - [Building from Source](#building-from-source)
 - [Runtime Files & Folders](#runtime-files--folders)
 - [Status and Roadmap](#status-and-roadmap)
+- [Live Example (RaindropPlugins)](#live-example-raindropplugins)
 - [Credits](#credits)
 
 
@@ -281,6 +282,13 @@ Notes:
 - Vault migration tool: Work in progress (WIP). Compatibility/provider replacement scaffolding exists.
 - InventoryFramework: dependency already injected; no extra setup required.
 
+
+## Live Example (RaindropPlugins)
+A live, actively developed example of JECurrency in the broader RaindropPlugins ecosystem:
+
+- RaindropPlugins: https://github.com/Antimatter-Zone/RaindropPlugins_
+
+This repository showcases integration patterns with JECurrency, command usage, translations, and UI flows. Use it as a reference implementation when building your own integrations.
 
 ## Credits
 - Author: JExcellence — https://jexcellence.de
