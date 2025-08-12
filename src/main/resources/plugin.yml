@@ -1,5 +1,7 @@
 name: JECurrency
 version: '1.0.0'
 main: de.jexcellence.currency.JECurrency
-api-version: '1.21'
-authors: [AlphaOmega-IT, SaltyFeaRz]
+api-version: '1.19'
+authors: [ JExcellence ]
+depend: [ InventoryFramework ]
+softdepend: [ Vault ]

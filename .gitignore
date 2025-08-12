@@ -1,5 +1,5 @@
-# Project exclude paths
 /.gradle/
+/.idea/
+/.qodo/
 /build/
 /build/classes/java/main/
-.qodo

@@ -19,6 +19,6 @@ commands:
       malformedFloat$: 'lut["prefix"] & "&7The value &c" & value & " &7is not a valid &cfloat"'
       malformedLong$: 'lut["prefix"] & "&7The value &c" & value & " &7is not a valid &clong"'
       malformedInteger$: 'lut["prefix"] & "&7The value &c" & value & " &7is not a valid &cinteger"'
-    
+
 lut:
   prefix: '&7[&eConsole-Deposit&7] '

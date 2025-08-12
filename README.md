@@ -4,8 +4,10 @@ Advanced multi-currency economy plugin for Paper servers with a modern UI, inter
 
 JECurrency provides:
 - Multiple currencies with identifiers, symbols, prefixes/suffixes, and icons
-- Interactive GUIs powered by InventoryFramework
-- Player-facing commands for viewing balances and currencies
+- Interactive GUIs powered by InventoryFramework with comprehensive currency management
+- Streamlined GUI-only command interface for intuitive user experience
+- Complete currency lifecycle management (create, edit, delete, view)
+- Advanced leaderboard system with ranking visualization and balance reset functionality
 - Administrative actions and pagination-based currency logs with filters and export
 - Internationalization (any language via R18n) with MiniMessage formatting
 - Console deposit/withdraw tools for server management
@@ -51,24 +53,35 @@ JECurrency is a modular, extensible currency system for Paper servers. It suppor
 
 
 ## Features
-- Multi-currency support
+- **Multi-currency support**
   - Identifier, symbol, prefix, suffix, and icon per currency
   - Automatic account provisioning for players on currency creation
-- Modern GUIs (InventoryFramework)
-  - Currency overview, details, creation, editing wizards
-  - Leaderboards per currency
-  - Admin-only operations (e.g., reset all balances for a currency)
-- Detailed currency logs for auditing
+  - Complete currency lifecycle management (create, edit, delete)
+- **Modern GUIs (InventoryFramework)**
+  - **Streamlined Command Interface**: `/currencies` opens comprehensive GUI management
+  - **Currency Creation**: Interactive anvil-based creation wizard with real-time validation
+  - **Currency Editing**: Full property editing with anvil input views for all currency attributes
+  - **Currency Deletion**: Safe deletion with impact assessment and confirmation dialogs
+  - **Currency Overview**: Paginated display of all currencies with detailed information
+  - **Advanced Leaderboards**: Ranking system with visual hierarchy (gold/silver/bronze) and formatted displays
+  - **Admin Operations**: Reset all player balances for specific currencies with confirmation
+- **Comprehensive Currency Management**
+  - **Create**: Through intuitive anvil GUI with validation for identifiers, symbols, icons, prefixes, and suffixes
+  - **Edit**: Modify existing currency properties (symbol, icon, prefix, suffix) with real-time updates
+  - **Delete**: Safe removal with impact assessment showing affected players and total balances
+  - **View**: Detailed currency information with leaderboard access and administrative functions
+  - **Reset**: Administrative function to reset all player balances to zero with confirmation
+- **Detailed currency logs for auditing**
   - View with pages, hover tooltips, and clickable navigation
   - Filters by player, currency, log type, log level, and operation (deposit/withdraw)
   - Export logs to file
-- Internationalization (R18n)
+- **Internationalization (R18n)**
   - Any language is supported: create a new language file and fill translations
   - Reload translations in-game and analyze missing translation keys
   - MiniMessage gradient styling across all messages and UIs
-- Console utilities for economy administration
+- **Console utilities for economy administration**
   - Deposit/withdraw to player accounts directly from console
-- Developer API
+- **Developer API**
   - Use `CurrencyAdapter` for balance queries, deposits, withdrawals, and currency management
 
 
@@ -127,17 +140,19 @@ JECurrency declares commands via YAML under `src/main/resources/commands`.
 #### /pcurrencies
 - Alias: `/currencies`
 - Base permission: `currencies.command`
-- Sub-permissions:
-  - `currencies.command.create` — create a currency
-  - `currencies.command.delete` — delete a currency
-  - `currencies.command.update` — edit/update a currency
-  - `currencies.command.overview` — view currency overview
-- Typical usages (as referenced by translations):
-  - `/currencies create <identifier> <symbol> [prefix] [suffix]`
-  - `/currencies delete <identifier>`
-  - `/currencies edit <identifier> <field> <value>`
-  - `/currencies overview`
-  - `/currencies info <identifier>`
+- **GUI-Only Interface**: Opens comprehensive currency management GUI
+- **Usage**: Simply execute `/currencies` to access all currency management features
+- **Features Available in GUI**:
+  - **Create Currency**: Interactive anvil-based creation wizard with validation
+  - **Edit Currency**: Select and modify existing currency properties
+  - **Delete Currency**: Safe deletion with impact assessment (admin-only)
+  - **View Currencies**: Browse all currencies with pagination and leaderboards
+  - **Administrative Functions**: Reset balances, detailed currency information
+- **Permission-Based Access**: Different GUI elements require appropriate permissions
+  - `currencies.command.create` — access currency creation interface
+  - `currencies.command.delete` — access currency deletion interface (admin)
+  - `currencies.command.update` — access currency editing interface
+  - `currencies.command.overview` — access currency overview and details
 
 #### /pcurrencylog
 - Aliases: `/plog`, `/currencylog`, `/economylog`, `/ecolog`
@@ -278,9 +293,24 @@ Notes:
 
 
 ## Status and Roadmap
-- Editing/deleting currencies via UI: Work in progress (WIP). Commands are functional.
+- **Currency Management**: ✅ **Complete** - Full CRUD operations via intuitive GUI interface
+  - ✅ Currency Creation with anvil-based wizard and validation
+  - ✅ Currency Editing with real-time property modification
+  - ✅ Currency Deletion with safety measures and impact assessment
+  - ✅ Currency Overview with pagination and detailed information
+  - ✅ Advanced Leaderboards with ranking visualization
+  - ✅ Administrative Functions (balance reset, detailed views)
+- **Command Interface**: ✅ **Complete** - Streamlined GUI-only `/currencies` command
+- **Safety Features**: ✅ **Complete** - Confirmation dialogs, impact assessment, permission-based access
 - Vault migration tool: Work in progress (WIP). Compatibility/provider replacement scaffolding exists.
 - InventoryFramework: dependency already injected; no extra setup required.
+
+### Recent Updates
+- **v2.0**: Complete GUI overhaul with comprehensive currency management
+- **Enhanced UX**: Simplified command interface - just `/currencies` opens everything
+- **Safety First**: Multiple confirmation dialogs and impact assessment for destructive operations
+- **Admin Tools**: Advanced administrative functions with proper permission controls
+- **Visual Polish**: Ranking system with gold/silver/bronze hierarchy and formatted displays
 
 
 ## Live Example (RaindropPlugins)

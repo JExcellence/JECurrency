@@ -1,214 +1,166 @@
 package de.jexcellence.currency.command.player.currencies;
 
-import de.jexcellence.commands.PlayerCommand;
-import de.jexcellence.commands.utility.Command;
+import com.raindropcentral.commands.PlayerCommand;
+import com.raindropcentral.commands.utility.Command;
 import de.jexcellence.currency.JECurrency;
-import de.jexcellence.je18n.i18n.I18n;
+import de.jexcellence.currency.view.currency.CurrenciesActionOverviewView;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * Primary command handler for player-initiated currency management operations.
+ * <p>
+ * This class serves as the main entry point for players to interact with the currency system
+ * through a graphical user interface. When executed, it opens the currency management GUI
+ * where players can perform all currency-related operations including creation, editing,
+ * viewing, and deletion (with appropriate permissions).
+ * </p>
+ *
+ * <h3>GUI-Based Operations:</h3>
+ * <ul>
+ *   <li><strong>Currency Creation:</strong> Create new currencies through anvil GUI</li>
+ *   <li><strong>Currency Editing:</strong> Edit existing currency properties (coming soon)</li>
+ *   <li><strong>Currency Deletion:</strong> Remove currencies from the system (coming soon)</li>
+ *   <li><strong>Currency Overview:</strong> View all currencies with leaderboards</li>
+ *   <li><strong>Balance Reset:</strong> Reset currency balances for all players</li>
+ * </ul>
+ *
+ * <h3>Permission Integration:</h3>
+ * <p>
+ * The command system integrates with the {@link ECurrenciesPermission} framework to ensure
+ * that only authorized users can access the GUI. Individual operations within the GUI
+ * perform their own permission checks as needed.
+ * </p>
+ *
+ * <h3>User Interface Integration:</h3>
+ * <p>
+ * The command opens the {@link CurrenciesActionOverviewView} which provides an intuitive
+ * graphical interface for all currency management operations, eliminating the need for
+ * complex command-line syntax.
+ * </p>
+ *
+ * @author JExcellence
+ * @version 1.0.0
+ * @since 1.0.0
+ * @see PlayerCommand
+ * @see CurrenciesActionOverviewView
+ * @see ECurrenciesPermission
+ */
 @Command
 public class PCurrencies extends PlayerCommand {
-
-	private final JECurrency currency;
-	private final CurrencyCommandHandler commandHandler;
-
+	
+	/**
+	 * The main JECurrency plugin instance providing access to core services and repositories.
+	 * <p>
+	 * This instance serves as the primary gateway to the plugin's infrastructure,
+	 * including database repositories, service adapters, executor services, and
+	 * user interface frameworks required for currency operations.
+	 * </p>
+	 */
+	private final JECurrency jeCurrency;
+	
+	/**
+	 * Constructs a new player currency command handler with the specified configuration and plugin instance.
+	 * <p>
+	 * This constructor initializes the command handler with the necessary dependencies to
+	 * open the currency management GUI. It establishes connections to the plugin's
+	 * infrastructure for accessing the view framework.
+	 * </p>
+	 *
+	 * <h3>Initialization Process:</h3>
+	 * <ul>
+	 *   <li>Registers the command with the parent command framework</li>
+	 *   <li>Establishes connection to the JECurrency plugin instance</li>
+	 *   <li>Configures permission integration and validation</li>
+	 * </ul>
+	 *
+	 * @param commandSectionConfiguration the command section configuration containing command metadata and settings, must not be null
+	 * @param jeCurrency the main JECurrency plugin instance providing access to services and repositories, must not be null
+	 * @throws IllegalArgumentException if either parameter is null
+	 */
 	public PCurrencies(
-			final @NotNull PCurrenciesSection commandSection,
-			final @NotNull JECurrency currency
+		final @NotNull PCurrenciesSection commandSectionConfiguration,
+		final @NotNull JECurrency jeCurrency
 	) {
-		super(commandSection);
-		this.currency = currency;
-		this.commandHandler = new CurrencyCommandHandler(currency);
+		super(commandSectionConfiguration);
+		this.jeCurrency = jeCurrency;
 	}
-
+	
+	/**
+	 * Handles the execution of currency commands initiated by players.
+	 * <p>
+	 * This method serves as the primary entry point for currency command operations.
+	 * It performs permission validation and opens the graphical user interface
+	 * for currency management. All currency operations are now handled through
+	 * the GUI interface for a more intuitive user experience.
+	 * </p>
+	 *
+	 * <h3>Execution Flow:</h3>
+	 * <ol>
+	 *   <li>Validates base currency command permissions</li>
+	 *   <li>Opens the currency management GUI interface</li>
+	 * </ol>
+	 *
+	 * <h3>Permission Validation:</h3>
+	 * <p>
+	 * The command requires the base currencies permission to access the GUI.
+	 * Individual operations within the GUI will perform their own permission
+	 * checks as needed.
+	 * </p>
+	 *
+	 * @param commandExecutingPlayer the player executing the currency command, must not be null
+	 * @param commandLabel the command label used to invoke this command, must not be null
+	 * @param commandArguments the arguments provided with the command, must not be null
+	 */
 	@Override
 	protected void onPlayerInvocation(
-			final @NotNull Player player,
-			final @NotNull String label,
-			final @NotNull String[] args
+		final @NotNull Player commandExecutingPlayer,
+		final @NotNull String commandLabel,
+		final @NotNull String[] commandArguments
 	) {
 		if (
-				this.hasNoPermission(player, ECurrenciesPermission.CURRENCIES)
-		) return;
-
-		ECurrenciesAction action = this.enumParameterOrElse(args, 0, ECurrenciesAction.class, ECurrenciesAction.HELP);
-
-		if (action == ECurrenciesAction.HELP) {
-			this.help(player);
+			this.hasNoPermission(
+				commandExecutingPlayer,
+				ECurrenciesPermission.CURRENCIES
+			)
+		) {
 			return;
 		}
-
-		switch (action) {
-			case CREATE -> {
-				if (this.hasNoPermission(player, ECurrenciesPermission.CREATE)) return;
-				this.commandHandler.createCurrency(player, args);
-			}
-			case DELETE -> {
-				if (this.hasNoPermission(player, ECurrenciesPermission.DELETE)) return;
-				this.commandHandler.deleteCurrency(player, args);
-			}
-			case EDIT -> {
-				if (this.hasNoPermission(player, ECurrenciesPermission.EDIT)) return;
-				this.commandHandler.editCurrency(player, args);
-			}
-			case OVERVIEW -> {
-				if (this.hasNoPermission(player, ECurrenciesPermission.OVERVIEW)) return;
-				this.commandHandler.listCurrencies(player);
-			}
-			case INFO -> {
-				if (this.hasNoPermission(player, ECurrenciesPermission.OVERVIEW)) return;
-				this.commandHandler.showCurrencyInfo(player, args);
-			}
-		}
-	}
-
-	@Override
-	protected List<String> onPlayerTabCompletion(
-			final @NotNull Player player,
-			final @NotNull String label,
-			final @NotNull String[] args
-	) {
-		List<String> completions = new ArrayList<>();
-
-		if (args.length == 1) {
-			List<String> availableCommands = new ArrayList<>();
-
-			if (! this.hasNoPermission(player, ECurrenciesPermission.OVERVIEW)) {
-				availableCommands.add(ECurrenciesAction.OVERVIEW.name().toLowerCase());
-				availableCommands.add(ECurrenciesAction.INFO.name().toLowerCase());
-			}
-
-			if (! this.hasNoPermission(player, ECurrenciesPermission.CREATE)) {
-				availableCommands.add(ECurrenciesAction.CREATE.name().toLowerCase());
-			}
-
-			if (! this.hasNoPermission(player, ECurrenciesPermission.DELETE)) {
-				availableCommands.add(ECurrenciesAction.DELETE.name().toLowerCase());
-			}
-
-			if (! this.hasNoPermission(player, ECurrenciesPermission.EDIT)) {
-				availableCommands.add(ECurrenciesAction.EDIT.name().toLowerCase());
-			}
-
-			availableCommands.add(ECurrenciesAction.HELP.name().toLowerCase());
-
-			return StringUtil.copyPartialMatches(args[0].toLowerCase(), availableCommands, completions);
-		}
-
-		if (args.length == 2) {
-			try {
-				ECurrenciesAction action = ECurrenciesAction.valueOf(args[0].toUpperCase());
-
-				switch (action) {
-					case INFO, DELETE, EDIT -> {
-						if (! this.hasNoPermission(player, getRequiredPermissionForAction(action))) {
-							return StringUtil.copyPartialMatches(
-									args[1].toLowerCase(),
-									this.commandHandler.getCurrencyIdentifiers().join(),
-									completions
-							);
-						}
-					}
-					case CREATE -> {
-						if (! this.hasNoPermission(player, ECurrenciesPermission.CREATE)) {
-							List<String> suggestions = Arrays.asList("coins", "gems", "tokens", "points", "credits");
-							return StringUtil.copyPartialMatches(args[1].toLowerCase(), suggestions, completions);
-						}
-					}
-				}
-			} catch (IllegalArgumentException e) {
-				return completions;
-			}
-		}
-
-		if (args.length == 3) {
-			try {
-				ECurrenciesAction action = ECurrenciesAction.valueOf(args[0].toUpperCase());
-
-				switch (action) {
-					case EDIT -> {
-						if (! this.hasNoPermission(player, ECurrenciesPermission.EDIT)) {
-							return StringUtil.copyPartialMatches(
-									args[2].toLowerCase(),
-									this.commandHandler.getEditableFields(),
-									completions
-							);
-						}
-					}
-				}
-			} catch (IllegalArgumentException e) {
-				return completions;
-			}
-		}
-
-		if (args.length == 4 && args[0].equalsIgnoreCase(ECurrenciesAction.EDIT.name())) {
-			String field = args[2].toLowerCase();
-
-			if (field.equals("symbol")) {
-				List<String> symbols = getCurrencySymbols();
-				return StringUtil.copyPartialMatches(args[3], symbols, completions);
-			} else if (field.equals("prefix") || field.equals("suffix")) {
-				List<String> suggestions = Arrays.asList("", " ", "  ");
-				return StringUtil.copyPartialMatches(args[3], suggestions, completions);
-			}
-		}
-
-		return completions;
-	}
-
-	/**
-	 * Gets a list of currency symbols that are compatible with Minecraft's chat system
-	 *
-	 * @return A list of currency symbols
-	 */
-	private List<String> getCurrencySymbols() {
-		return Arrays.asList(
-				"$",
-				"€",
-				"£",
-				"¥",
-				"₿",
-				"★",
-				"✦",
-				"\u2B50",
-				"\u25C6",
-				"\u2666",
-				"\u27E1",
-				"C",
-				"G",
-				"P",
-				"T",
-				"*",
-				"#",
-				"@",
-				"+"
+		
+		// Always open the GUI interface regardless of arguments
+		this.jeCurrency.getViewFrame().open(
+			CurrenciesActionOverviewView.class,
+			commandExecutingPlayer,
+			Map.of(
+				"plugin",
+				this.jeCurrency
+			)
 		);
 	}
-
+	
 	/**
-	 * Gets the required permission for a specific action
+	 * Provides tab completion for the currency command.
+	 * <p>
+	 * Since this command only opens a GUI interface, no tab completion
+	 * suggestions are provided. All operations are handled through the
+	 * graphical user interface.
+	 * </p>
 	 *
-	 * @param action The action to check
-	 * @return The permission required for the action
+	 * @param tabCompletionRequestingPlayer the player requesting tab completion, must not be null
+	 * @param commandLabel the command label being completed, must not be null
+	 * @param currentCommandArguments the current command arguments for context, must not be null
+	 * @return an empty list since no tab completion is needed for GUI-only command, never null
 	 */
-	private ECurrenciesPermission getRequiredPermissionForAction(ECurrenciesAction action) {
-		return switch (action) {
-			case OVERVIEW, INFO, HELP -> ECurrenciesPermission.OVERVIEW;
-			case CREATE -> ECurrenciesPermission.CREATE;
-			case DELETE -> ECurrenciesPermission.DELETE;
-			case EDIT -> ECurrenciesPermission.EDIT;
-		};
-	}
-
-	private void help(
-			final @NotNull Player player
+	@Override
+	protected @NotNull List<String> onPlayerTabCompletion(
+		final @NotNull Player tabCompletionRequestingPlayer,
+		final @NotNull String commandLabel,
+		final @NotNull String[] currentCommandArguments
 	) {
-		new I18n.Builder("currencies.help", player).includingPrefix().build().send();
+		return new ArrayList<>();
 	}
 }

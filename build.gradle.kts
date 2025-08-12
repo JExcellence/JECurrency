@@ -1,14 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
 
 plugins {
     id("java")
     id("maven-publish")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.6"
 }
 
 group = "de.jexcellence.currency"
-version = "1.0.0"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -25,33 +24,49 @@ repositories {
         name = "placeholderapi"
         url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
+    maven {
+        name = "sonatype-snapshots"
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+    }
+    maven {
+        name = "tcoded-releases"
+        url = uri("https://repo.tcoded.com/releases")
+    }
+    maven {
+        name = "jitpack"
+        url = uri("https://jitpack.io")
+    }
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
 
-    // JExcellence Implementations
-    implementation("de.jexcellence.commands:JECommands:1.0.0") { isTransitive = false; }
-    implementation("de.jexcellence.config:Evaluable:1.0.0") { isTransitive = false; }
-    implementation("de.jexcellence.config:GPEEE:1.0.0") { isTransitive = false; }
-    implementation("de.jexcellence.config:ConfigMapper:1.0.0") { isTransitive = false; }
-    implementation("de.jexcellence.je18n:JE18n:1.0.0") { isTransitive = false; }
-    implementation("de.jexcellence.hibernate:JEHibernate:1.0.0") { isTransitive = false; }
-    implementation("de.jexcellence.platform:JEPlatform:1.0.0") { isTransitive = false; }
+    implementation("com.raindropcentral.commands:RCommands:1.0.0") { isTransitive = false }
+    implementation("com.raindropcentral.r18n:R18n:1.0.0") { isTransitive = false }
+    implementation("com.raindropcentral.rplatform:RPlatform:1.0.0") { isTransitive = false }
+    implementation("de.jexcellence.config:Evaluable:1.0.0") { isTransitive = false }
+    implementation("de.jexcellence.config:GPEEE:1.0.0") { isTransitive = false }
+    implementation("de.jexcellence.config:ConfigMapper:1.0.0") { isTransitive = false }
+    implementation("de.jexcellence.hibernate:JEHibernate:1.0.0") { isTransitive = false }
 
+    compileOnly("me.devnatan:inventory-framework-api:3.5.1")
+    compileOnly("me.devnatan:inventory-framework-platform-bukkit:3.5.1")
+    compileOnly("me.devnatan:inventory-framework-anvil-input:3.5.1")
+    compileOnly("me.devnatan:inventory-framework-platform:3.5.1")
+    compileOnly("me.devnatan:inventory-framework-core:3.5.1")
+    compileOnly("me.devnatan:inventory-framework-platform-paper:3.5.1")
 
-    compileOnly("me.clip:placeholderapi:2.11.6")
-
-    // Inventory framework
-    compileOnly("me.devnatan:inventory-framework-platform-bukkit:3.2.0")
-    compileOnly("me.devnatan:inventory-framework-platform-paper:3.2.0")
-    compileOnly("me.devnatan:inventory-framework-anvil-input:3.2.0")
-
-    // Hibernate dependencies
     compileOnly(platform("org.hibernate.orm:hibernate-platform:6.6.4.Final"))
     compileOnly("org.hibernate.orm:hibernate-core")
     compileOnly("jakarta.transaction:jakarta.transaction-api")
     compileOnly("com.github.ben-manes.caffeine:caffeine:3.2.0")
+    compileOnly("com.mysql:mysql-connector-j:9.2.0")
+    compileOnly("com.h2database:h2:2.3.232")
+    compileOnly("com.tcoded:FoliaLib:0.5.1")
+
+    // Plugin APIs
+    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7") { isTransitive = false }
 }
 
 java {
@@ -60,30 +75,74 @@ java {
     }
 }
 
-tasks.register<ShadowJar>("cleanShadowJar") {
-    dependsOn("clean", "shadowJar")
-}
+sourceSets {
+    val main by getting
 
-tasks.withType<ShadowJar> {
-    //destinationDirectory.set(file("C:\\Users\\Justin\\Desktop\\JExcellence\\JExcellence-Server\\plugins"))
+    create("free") {
+        java.srcDir("src/free/java")
+        resources.srcDir("src/free/resources")
+        compileClasspath += main.compileClasspath + main.output
+        runtimeClasspath += main.runtimeClasspath + main.output
+    }
 
-    archiveFileName.set("JECurrency.jar")
-
-    dependencies {
-        exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+    create("premium") {
+        java.srcDir("src/premium/java")
+        resources.srcDir("src/premium/resources")
+        compileClasspath += main.compileClasspath + main.output
+        runtimeClasspath += main.runtimeClasspath + main.output
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-            groupId = project.group.toString()
-            artifactId = "JECurrency"
-            version = project.version.toString()
-        }
+configurations {
+    named("freeImplementation") {
+        extendsFrom(configurations["implementation"])
     }
-    repositories {
-        mavenLocal()
+    named("premiumImplementation") {
+        extendsFrom(configurations["implementation"])
+    }
+    named("freeRuntimeOnly") {
+        extendsFrom(configurations["runtimeOnly"])
+    }
+    named("premiumRuntimeOnly") {
+        extendsFrom(configurations["runtimeOnly"])
+    }
+}
+
+fun shadowDepsFor(sourceSetName: String) =
+    configurations.getByName("${sourceSetName}RuntimeClasspath")
+
+tasks {
+    val shadowFree by registering(ShadowJar::class) {
+        group = "build"
+        description = "Builds the Free version shadow JAR"
+        archiveFileName.set("JECurrency-Free-${project.version}.jar")
+        archiveClassifier.set("free")
+        from(sourceSets["main"].output)
+        from(sourceSets["free"].output)
+
+        val runtimeConfig = shadowDepsFor("free")
+        configurations = listOf(runtimeConfig)
+
+        mergeServiceFiles()
+        dependsOn("jar")
+    }
+
+    val shadowPremium by registering(ShadowJar::class) {
+        group = "build"
+        description = "Builds the Premium version shadow JAR"
+        archiveFileName.set("JECurrency-Premium-${project.version}.jar")
+        archiveClassifier.set("premium")
+        from(sourceSets["main"].output)
+        from(sourceSets["premium"].output)
+
+        val runtimeConfig = shadowDepsFor("premium")
+        configurations = listOf(runtimeConfig)
+
+        mergeServiceFiles()
+        dependsOn("jar")
+    }
+
+    build {
+        dependsOn(shadowFree, shadowPremium)
     }
 }
